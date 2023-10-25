@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 
-const Book = sequelize.define('Book', {
+const Book = sequelize.define('book', {
   title: {
     type: DataTypes.STRING,
     allowNull: false,

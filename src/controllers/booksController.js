@@ -36,8 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBook = exports.updateBook = exports.getAllBooks = exports.getBookById = exports.createBook = void 0;
+exports.rentBook = exports.deleteBook = exports.updateBook = exports.getAllBooks = exports.getBookById = exports.createBook = void 0;
 var books_1 = require("../models/books");
+var rental_1 = require("../models/rental");
 // Create a new book
 var createBook = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, title, description, published, book, response, error_1;
@@ -162,3 +163,38 @@ var deleteBook = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.deleteBook = deleteBook;
+// rent book
+var rentBook = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var customer, _a, title, rentalDate, dueDate, book, rental, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 3, , 4]);
+                customer = req.user;
+                _a = req.body, title = _a.title, rentalDate = _a.rentalDate, dueDate = _a.dueDate;
+                return [4 /*yield*/, books_1.default.findOne({ where: { title: title } })];
+            case 1:
+                book = _b.sent();
+                console.log(book);
+                if (!book) {
+                    return [2 /*return*/, res.status(404).json({ error: 'Book not found' })];
+                }
+                return [4 /*yield*/, rental_1.default.create({
+                        rentalDate: new Date(rentalDate),
+                        dueDate: new Date(dueDate),
+                        bookId: book.id,
+                        customerId: customer.id,
+                    })];
+            case 2:
+                rental = _b.sent();
+                res.status(200).json({ success: true, rental: rental });
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _b.sent();
+                res.status(500).json({ error: 'Failed to rent the book', details: error_2 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.rentBook = rentBook;

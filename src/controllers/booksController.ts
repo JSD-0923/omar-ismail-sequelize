@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import Book from '../models/books';
+import Rental from '../models/rental';
+import Customer from '../models/customer'; 
+
 
 // Create a new book
 export const createBook = async (req: Request, res: Response) => {
@@ -72,5 +75,34 @@ export const deleteBook = async (req: Request, res: Response) => {
     res.status(200).send('book with id:' + id +  ' and name:' + title + ' deleted successfully');
   } else {
     res.status(404).send('Book not found');
+  }
+};
+
+
+// rent book
+export const rentBook = async (req: Request, res: Response) => {
+  try {
+    const customer = req.user as typeof Customer;
+    const { title, rentalDate, dueDate } = req.body;
+
+    // Check if the book with the given title exists
+    const book = await Book.findOne({ where: { title } });
+
+    console.log(book);
+    
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    const rental = await Rental.create({
+      rentalDate: new Date(rentalDate),
+      dueDate: new Date(dueDate),
+      bookId: book.id,
+      customerId: customer.id,
+    });
+
+    res.status(200).json({ success: true, rental });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to rent the book', details: error });
   }
 };
