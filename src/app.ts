@@ -1,4 +1,5 @@
 const express = require('express');
+import { Request, Response } from 'express';
 const bodyParser = require('body-parser');
 import sequelize from './sequelize';
 import * as passport  from "passport";
@@ -11,8 +12,11 @@ app.use(bodyParser.json());
 
 app.use(passport.initialize());
 import './passport';
-app.use('/customers', customerRoutes);
+app.use( customerRoutes);
 app.use( bookRoutes);
+app.all('*', (req: Request, res: Response) => {
+  res.status(404).send('Invalid endpoint. Please enter a valid route.');
+});
 
 
 const host = 'localhost';

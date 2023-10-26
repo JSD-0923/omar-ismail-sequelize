@@ -5,6 +5,11 @@ import Customer from './customer';
 import Book from './books'; 
 
 const Rental = sequelize.define('rental', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
     rentalDate: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -31,7 +36,11 @@ const Rental = sequelize.define('rental', {
       },
   });
 
-Customer.belongsToMany(Book, { through: Rental });
-Book.belongsToMany(Customer, { through: Rental });
+  Customer.hasMany(Rental);
+  Rental.belongsTo(Customer);
+  
+  Book.hasMany(Rental);
+  Rental.belongsTo(Book);
+
 
 export default Rental;

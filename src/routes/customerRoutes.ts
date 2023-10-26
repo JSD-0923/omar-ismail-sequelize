@@ -20,9 +20,8 @@ router.post('/login', customersController.loginCustomer);
         }
     })
 })
-router.all('*', (req: Request, res: Response) => {
-    res.status(404).send('Invalid endpoint please enter /register if you are new customer \n if you have been registered enter /login');
-  });
+ router.get('/customer' , customersController.getCustomer);
+
 
   
 export default router;

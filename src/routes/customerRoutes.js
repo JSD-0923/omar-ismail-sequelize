@@ -18,7 +18,8 @@ router.get('/protected', passport.authenticate('jwt', { session: false }), funct
         }
     });
 });
-router.all('*', function (req, res) {
-    res.status(404).send('Invalid endpoint please enter /register if you are new customer \n if you have been registered enter /login');
-});
+router.get('/customer', customersController.getCustomer);
+// router.all('/customers*', (req: Request, res: Response) => {
+//     res.status(404).send('Invalid endpoint please enter /register if you are new customer \n if you have been registered enter /login');
+//   });
 exports.default = router;

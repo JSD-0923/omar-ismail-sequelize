@@ -36,8 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginCustomer = exports.createCustomer = void 0;
+exports.getCustomer = exports.loginCustomer = exports.createCustomer = void 0;
 var customer_1 = require("../models/customer");
+var books_1 = require("../models/books");
+var rental_1 = require("../models/rental");
 var bcrypt_1 = require("bcrypt");
 var jwt = require("jsonwebtoken");
 // register a new customer
@@ -107,3 +109,28 @@ var loginCustomer = function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.loginCustomer = loginCustomer;
+var getCustomer = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, customer_1.default.findAll({
+                    include: [
+                        {
+                            model: rental_1.default,
+                            include: [
+                                {
+                                    model: books_1.default,
+                                }
+                            ],
+                        },
+                    ],
+                })];
+            case 1:
+                result = _a.sent();
+                console.log(result);
+                res.status(200).send(result);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.getCustomer = getCustomer;

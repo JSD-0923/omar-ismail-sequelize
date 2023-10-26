@@ -10,8 +10,11 @@ var app = express();
 app.use(bodyParser.json());
 app.use(passport.initialize());
 require("./passport");
-app.use('/customers', customerRoutes_1.default);
+app.use(customerRoutes_1.default);
 app.use(bookRoutes_1.default);
+app.all('*', function (req, res) {
+    res.status(404).send('Invalid endpoint. Please enter a valid route.');
+});
 var host = 'localhost';
 var port = 3000;
 sequelize_1.default.sync().then(function () {

@@ -5,6 +5,11 @@ var sequelize_2 = require("../sequelize");
 var customer_1 = require("./customer");
 var books_1 = require("./books");
 var Rental = sequelize_2.default.define('rental', {
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     rentalDate: {
         type: sequelize_1.DataTypes.DATE,
         allowNull: false,
@@ -30,6 +35,10 @@ var Rental = sequelize_2.default.define('rental', {
         },
     },
 });
-customer_1.default.belongsToMany(books_1.default, { through: Rental });
-books_1.default.belongsToMany(customer_1.default, { through: Rental });
+customer_1.default.hasMany(Rental);
+Rental.belongsTo(customer_1.default);
+books_1.default.hasMany(Rental);
+Rental.belongsTo(books_1.default);
+// Customer.belongsToMany(Book, { through: Rental });
+// Book.belongsToMany(Customer, { through: Rental });
 exports.default = Rental;
